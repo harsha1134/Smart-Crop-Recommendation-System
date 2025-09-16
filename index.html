@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crop Recommendation System</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+    /* Global Styles */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    body {
+        font-family: 'Roboto', sans-serif;
+        background: linear-gradient(to right, #2e7d32, #4caf50);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: #fff;
+    }
+
+    /* Container Card */
+    .container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 40px 30px;
+        border-radius: 20px;
+        max-width: 700px;
+        width: 95%;
+        box-shadow: 0 15px 25px rgba(0,0,0,0.4);
+        position: relative;
+    }
+
+    /* Header */
+    h1 {
+        font-size: 2.2rem;
+        margin-bottom: 25px;
+        color: #ffeb3b;
+        text-align: center;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+
+    /* Auth Links */
+    .auth-link, .logout-link {
+        position: absolute;
+        top: 15px;
+        font-weight: 500;
+        color: #ffeb3b;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+    .auth-link:hover, .logout-link:hover { text-decoration: underline; }
+    .auth-link { right: 20px; }
+    .logout-link { left: 20px; }
+
+    /* Form Styles */
+    form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    label {
+        font-weight: 500;
+        margin-bottom: 5px;
+        display: block;
+    }
+    input, select {
+        width: 100%;
+        padding: 12px 10px;
+        border-radius: 10px;
+        border: none;
+        font-size: 1rem;
+        outline: none;
+        transition: 0.3s;
+    }
+    input:focus, select:focus {
+        border: 2px solid #ffeb3b;
+        background: rgba(255,255,255,0.2);
+    }
+
+    /* Full width inputs */
+    .full-width {
+        grid-column: span 2;
+    }
+
+    /* Submit Button */
+    button {
+        grid-column: span 2;
+        padding: 15px;
+        background: #ffeb3b;
+        color: #2e7d32;
+        font-size: 1.1rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    button:hover {
+        background: #fdd835;
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Responsive for mobile */
+    @media(max-width: 600px){
+        form {
+            grid-template-columns: 1fr;
+        }
+        .full-width {
+            grid-column: span 1;
+        }
+        .auth-link, .logout-link {
+            position: static;
+            display: inline-block;
+            margin: 0 10px 20px 0;
+        }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <!-- Auth Links -->
+    <a href="/login" class="auth-link">🔑 Sign In</a>
+    <a href="/logout" class="logout-link">🚪 Logout</a>
+
+    <h1>🌱 Crop Recommendation System</h1>
+    <form action="/predict" method="post">
+        <!-- Numerical Inputs -->
+        <div>
+            <label for="N">Nitrogen (N)</label>
+            <input type="number" step="any" name="N" required>
+        </div>
+        <div>
+            <label for="P">Phosphorus (P)</label>
+            <input type="number" step="any" name="P" required>
+        </div>
+        <div>
+            <label for="K">Potassium (K)</label>
+            <input type="number" step="any" name="K" required>
+        </div>
+        <div>
+            <label for="temperature">Temperature (°C)</label>
+            <input type="number" step="any" name="temperature" required>
+        </div>
+        <div>
+            <label for="humidity">Humidity (%)</label>
+            <input type="number" step="any" name="humidity" required>
+        </div>
+        <div>
+            <label for="ph">pH</label>
+            <input type="number" step="any" name="ph" required>
+        </div>
+        <div>
+            <label for="rainfall">Rainfall (mm)</label>
+            <input type="number" step="any" name="rainfall" required>
+        </div>
+
+        <!-- Categorical Inputs -->
+        <div>
+            <label for="soil_type">Soil Type</label>
+            <select name="soil_type" required>
+                <option value="sandy">Sandy</option>
+                <option value="clay">Clay</option>
+                <option value="loamy">Loamy</option>
+                <option value="black">Black</option>
+                <option value="red">Red</option>
+            </select>
+        </div>
+        <div>
+            <label for="season">Season</label>
+            <select name="season" required>
+                <option value="Kharif">Kharif</option>
+                <option value="Rabi">Rabi</option>
+                <option value="Zaid">Zaid</option>
+            </select>
+        </div>
+        <div>
+            <label for="region">Region</label>
+            <select name="region" required>
+                <option value="North">North</option>
+                <option value="South">South</option>
+                <option value="East">East</option>
+                <option value="West">West</option>
+                <option value="Central">Central</option>
+            </select>
+        </div>
+        <div>
+            <label for="irrigation">Irrigation</label>
+            <select name="irrigation" required>
+                <option value="Canal">Canal</option>
+                <option value="Tube Well">Tube Well</option>
+                <option value="Drip">Drip</option>
+                <option value="Rainfed">Rainfed</option>
+            </select>
+        </div>
+        <div>
+            <label for="fertilizer">Fertilizer</label>
+            <select name="fertilizer" required>
+                <option value="Organic">Organic</option>
+                <option value="Chemical">Chemical</option>
+                <option value="Mixed">Mixed</option>
+            </select>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit">🌾 Get Recommendation</button>
+    </form>
+</div>
+</body>
+</html>

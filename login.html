@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Crop Recommendation System</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 30%, #43a047 70%, #66bb6a 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: #fff;
+        padding: 20px;
+        position: relative;
+        overflow: auto;
+    }
+
+    /* Animated background elements */
+    .bg-leaves {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        opacity: 0.15;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' width='100' height='100'%3E%3Cpath fill='%23ffffff' d='M50,10 A40,40 0 1,1 50,90 A40,40 0 1,1 50,10 Z' transform='rotate(45 50 50)'/%3E%3C/svg%3E");
+        background-size: 200px;
+    }
+
+    .floating-icon {
+        position: absolute;
+        font-size: 24px;
+        color: rgba(255, 255, 255, 0.3);
+        animation: float 15s infinite linear;
+    }
+
+    .floating-icon:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+    .floating-icon:nth-child(2) { top: 20%; right: 10%; animation-delay: 2s; }
+    .floating-icon:nth-child(3) { bottom: 15%; left: 15%; animation-delay: 4s; }
+    .floating-icon:nth-child(4) { bottom: 25%; right: 5%; animation-delay: 6s; }
+
+    @keyframes float {
+        0% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(10deg); }
+        100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    .container {
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(12px);
+        padding: 45px 35px;
+        border-radius: 24px;
+        max-width: 440px;
+        width: 100%;
+        box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .logo {
+        margin-bottom: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .logo-icon {
+        font-size: 40px;
+        color: #ffeb3b;
+        background: rgba(255, 235, 59, 0.15);
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        box-shadow: 0 0 20px rgba(255, 235, 59, 0.4);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(255, 235, 59, 0.4); }
+        70% { box-shadow: 0 0 0 15px rgba(255, 235, 59, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 235, 59, 0); }
+    }
+
+    h1 {
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+        color: #ffeb3b;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+        margin-bottom: 30px;
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 300;
+    }
+
+    form {
+        display: grid;
+        gap: 20px;
+    }
+
+    .input-group {
+        position: relative;
+        text-align: left;
+    }
+
+    label {
+        font-weight: 500;
+        display: block;
+        margin-bottom: 8px;
+        padding-left: 5px;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    input {
+        width: 100%;
+        padding: 16px 20px 16px 45px;
+        border-radius: 12px;
+        border: none;
+        font-size: 1rem;
+        outline: none;
+        transition: all 0.3s;
+        background: rgba(255, 255, 255, 0.18);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    input:focus {
+        background: rgba(255, 255, 255, 0.25);
+        border: 1px solid #ffeb3b;
+        box-shadow: 0 0 0 3px rgba(255, 235, 59, 0.2);
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 43px;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 18px;
+    }
+
+    .options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 5px;
+    }
+
+    .remember {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+    }
+
+    .remember input {
+        width: auto;
+        padding: 0;
+    }
+
+    .forgot {
+        color: #ffeb3b;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+    }
+
+    .forgot:hover {
+        text-decoration: underline;
+    }
+
+    button {
+        padding: 17px;
+        background: #ffeb3b;
+        color: #2e7d32;
+        font-size: 1.05rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        letter-spacing: 0.5px;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background: #ffd600;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    button:active {
+        transform: translateY(0);
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        margin: 25px 0;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .divider::before,
+    .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .divider span {
+        padding: 0 15px;
+        font-size: 0.9rem;
+    }
+
+    .social-login {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .social-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        font-size: 18px;
+        transition: all 0.3s;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+    }
+
+    .social-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-3px);
+    }
+
+    .signup-link {
+        margin-top: 20px;
+        color: #ffeb3b;
+        text-decoration: none;
+        font-weight: 500;
+        display: inline-block;
+        transition: all 0.3s;
+        font-size: 1rem;
+    }
+
+    .signup-link:hover {
+        text-decoration: underline;
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 500px) {
+        .container {
+            padding: 35px 25px;
+        }
+        
+        .options {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .social-login {
+            gap: 10px;
+        }
+    }
+</style>
+</head>
+<body>
+    <!-- Animated background elements -->
+    <div class="bg-leaves"></div>
+    <div class="floating-icon"><i class="fas fa-leaf"></i></div>
+    <div class="floating-icon"><i class="fas fa-seedling"></i></div>
+    <div class="floating-icon"><i class="fas fa-tint"></i></div>
+    <div class="floating-icon"><i class="fas fa-cloud-sun"></i></div>
+
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-seedling"></i>
+            </div>
+        </div>
+        
+        <h1>Welcome Back</h1>
+        <p class="subtitle">Sign in to access your crop recommendation dashboard</p>
+        
+        <form action="/login" method="post">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Password</label>
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            
+            <div class="options">
+                <div class="remember">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <a href="#" class="forgot">Forgot password?</a>
+            </div>
+            
+            <button type="submit">Login to Dashboard</button>
+        </form>
+        
+        <div class="divider">
+            <span>Or continue with</span>
+        </div>
+        
+        <div class="social-login">
+            <div class="social-btn">
+                <i class="fab fa-google"></i>
+            </div>
+            <div class="social-btn">
+                <i class="fab fa-facebook-f"></i>
+            </div>
+            <div class="social-btn">
+                <i class="fab fa-twitter"></i>
+            </div>
+        </div>
+        
+        <a href="/signup" class="signup-link">Don't have an account? Create one now</a>
+    </div>
+
+    <script>
+        // Simple animation on input focus
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', (e) => {
+                e.target.parentElement.querySelector('.input-icon').style.color = '#ffeb3b';
+            });
+            
+            input.addEventListener('blur', (e) => {
+                e.target.parentElement.querySelector('.input-icon').style.color = 'rgba(255, 255, 255, 0.7)';
+            });
+        });
+    </script>
+</body>
+</html>
