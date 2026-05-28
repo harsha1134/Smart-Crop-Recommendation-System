@@ -1,0 +1,8 @@
+Flask
+Flask-SQLAlchemy
+Flask-Migrate
+pandas
+numpy
+scikit-learn
+joblib
+Werkzeug
